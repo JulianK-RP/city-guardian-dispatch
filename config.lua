@@ -3,7 +3,7 @@ Config = {}
 
 -- General Settings
 Config.PoliceJob = 'police' -- Set to false if standalone
-Config.UseOxTarget = true
+Config.UseQBTarget = true
 Config.Debug = false
 
 -- Callout System

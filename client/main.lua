@@ -5,23 +5,29 @@ local interactingSuspect = nil
 
 -- Initialize
 Citizen.CreateThread(function()
-    -- Register ox_target if enabled
-    if Config.UseOxTarget then
-        exports.ox_target:addGlobalPed({
-            {
-                name = 'lspd_suspect_interact',
-                icon = 'fas fa-handcuffs',
-                label = 'Police Interaction',
-                canInteract = function(entity, distance, coords, name)
-                    return isOnDuty and distance < Config.InteractionDistance and 
-                           Entity(entity).state.isSuspect
-                end,
-                onSelect = function(data)
-                    InteractWithSuspect(data.entity)
-                end
-            }
+    -- Register qb-target if enabled
+    if Config.UseQBTarget then
+        exports['qb-target']:AddGlobalPed({
+            options = {
+                {
+                    type = "client",
+                    event = "lspd:interactWithSuspect",
+                    icon = "fas fa-handcuffs",
+                    label = "Police Interaction",
+                    canInteract = function(entity, distance, data)
+                        return isOnDuty and distance < Config.InteractionDistance and 
+                               Entity(entity).state.isSuspect
+                    end,
+                }
+            },
+            distance = Config.InteractionDistance
         })
     end
+end)
+
+-- Handle qb-target interaction event
+RegisterNetEvent('lspd:interactWithSuspect', function(data)
+    InteractWithSuspect(data.entity)
 end)
 
 -- Police duty toggle command
