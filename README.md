@@ -1,73 +1,166 @@
-# Welcome to your Lovable project
 
-## Project info
+# LSPD AI Callouts - FiveM Police Script
 
-**URL**: https://lovable.dev/projects/eac99f71-39f0-4860-9268-1679c799d0d1
+A comprehensive police roleplay script for FiveM servers running ox_core, providing dynamic AI-driven police callouts similar to LSPDFR.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+### 🚓 Core Police System
+- **Duty System**: Players can go on/off duty as police officers
+- **Dynamic Callouts**: Automatic generation of various crime types across the map
+- **AI Suspects**: Realistic NPC behavior with random responses (flee, fight, surrender)
+- **Professional Dispatch**: Comprehensive notification and map blip system
 
-**Use Lovable**
+### 🎯 Crime Types
+- **Armed Robbery**: Store robberies with armed suspects
+- **Vehicle Pursuits**: High-speed chases with fleeing suspects  
+- **Shots Fired**: Active shooter scenarios
+- **Assault**: Physical altercations and fights
+- **Domestic Disputes**: Household disturbance calls
+- **Grand Theft Auto**: Vehicle theft incidents
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/eac99f71-39f0-4860-9268-1679c799d0d1) and start prompting.
+### 👮 Police Tools
+- **Arrest System**: Full arrest mechanics with handcuffing
+- **Search & Frisk**: Pat-down suspects for contraband
+- **Citation System**: Issue fines and tickets
+- **Backup Requests**: Call for officer assistance
+- **Negotiation**: Attempt to peacefully resolve situations
+- **Transport System**: Send suspects to jail
 
-Changes made via Lovable will be committed automatically to this repo.
+### 📱 User Interface
+- **ox_lib Integration**: Modern UI with notifications and context menus
+- **ox_target Support**: Interactive targeting system
+- **Records System**: Track arrests and citations
+- **Admin Controls**: Test callouts and manage system
 
-**Use your preferred IDE**
+## Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Ensure you have the required dependencies:
+   - `ox_lib`
+   - `ox_target` (optional but recommended)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. Download and place the script in your resources folder
 
-Follow these steps:
+3. Add to your `server.cfg`:
+   ```
+   ensure lspd_ai_callouts
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+4. Configure the script by editing `config.lua`
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Configuration
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Basic Settings
+```lua
+Config.PoliceJob = 'police' -- Set to false for standalone
+Config.UseOxTarget = true   -- Enable ox_target integration
+Config.Debug = false        -- Enable debug logging
 ```
 
-**Edit a file directly in GitHub**
+### Callout Frequency
+```lua
+Config.CalloutFrequency = {
+    min = 120000, -- 2 minutes minimum
+    max = 300000  -- 5 minutes maximum
+}
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Crime Type Weights
+Adjust the probability of different crime types:
+```lua
+Config.CrimeTypes = {
+    robbery = { weight = 25, priority = 'High' },
+    pursuit = { weight = 20, priority = 'High' },
+    -- ... etc
+}
+```
 
-**Use GitHub Codespaces**
+## Commands
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Player Commands
+- `/duty` - Toggle police duty status
+- `/backup [reason]` - Request backup assistance
+- `/callouts` - View active callouts menu
+- `/policetools` - Access police tools menu
 
-## What technologies are used for this project?
+### Admin Commands
+- `/callout [type]` - Manually create a test callout
+  - Available types: robbery, pursuit, shots_fired, assault, domestic, theft
 
-This project is built with:
+## Key Bindings
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **F6** - Toggle Police Duty
+- **F7** - View Active Callouts
+- **F8** - Police Tools Menu  
+- **F9** - Request Backup
 
-## How can I deploy this project?
+## How It Works
 
-Simply open [Lovable](https://lovable.dev/projects/eac99f71-39f0-4860-9268-1679c799d0d1) and click on Share -> Publish.
+### Automatic Callout Generation
+- System monitors on-duty officers
+- Generates callouts within configurable radius of officers
+- Weighs crime types based on configuration
+- Limits maximum active callouts
 
-## Can I connect a custom domain to my Lovable project?
+### AI Suspect Behavior
+- **40%** chance to flee when police arrive
+- **30%** chance to surrender peacefully  
+- **30%** chance to fight/resist arrest
+- Behavior varies by crime type and situation
 
-Yes, you can!
+### Interaction System
+When approaching suspects, officers can:
+1. **Order Weapon Drop** - Command armed suspects to disarm
+2. **Arrest** - Place suspect in custody
+3. **Search** - Pat down for contraband
+4. **Negotiate** - Attempt peaceful resolution
+5. **Issue Citation** - Give fines instead of arrest
+6. **Transport to Jail** - Send to Bolingbroke Penitentiary
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Advanced Features
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Records System
+- Automatic logging of all arrests and citations
+- Searchable history for investigations
+- Fine calculation based on charges
+
+### Backup System
+- Real-time officer assistance requests
+- Priority levels (Low, Medium, High, Emergency)
+- Map blips for backup locations
+
+### Jail Integration
+- Automatic transport to Bolingbroke Penitentiary
+- Configurable jail times
+- Integration ready for advanced jail systems
+
+## Compatibility
+
+- **Framework**: ox_core (standalone compatible)
+- **UI Library**: ox_lib
+- **Targeting**: ox_target (optional)
+- **Dependencies**: No ESX or QB required
+
+## Support & Customization
+
+The script is designed to be easily customizable:
+
+- **Add New Crime Types**: Extend `Config.CrimeTypes`
+- **Modify AI Behavior**: Adjust `Config.AIBehavior` percentages
+- **Custom Suspect Models**: Edit `Config.SuspectModels`
+- **Integration**: Easy integration with MDT systems
+
+## Performance
+
+- Optimized for minimal server impact
+- Automatic cleanup of entities and blips
+- Configurable limits to prevent resource overload
+- Built-in debugging system for troubleshooting
+
+## License
+
+This script is provided as-is for educational and roleplay purposes. Feel free to modify and adapt for your server's needs.
+
+---
+
+*Created with ❤️ for the FiveM roleplay community*
